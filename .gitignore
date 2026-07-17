@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Model files
+model.onnx.data
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+
+# Training data
+data/

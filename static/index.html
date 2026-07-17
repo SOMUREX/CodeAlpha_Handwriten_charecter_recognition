@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satori AI - Neural Ink Engine</title>
+    <!-- Fontshare Fonts CDN: Cabinet Grotesk (Display) and Satoshi (Body) -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&f[]=cabinet-grotesk@800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <!-- Floating Glassmorphism Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid class-flame fa-fire-flame-curved"></i>
+                <span>Satori AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="#playground" class="active">Playground</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#dataset">Dataset</a>
+                <a href="#feedback">Feedback</a>
+            </div>
+            <a href="#playground" class="nav-cta">Launch Engine</a>
+        </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <main>
+        
+        <!-- Hero Section / Playground -->
+        <section id="playground" class="hero-section">
+            <div class="hero-grid">
+                
+                <!-- Left Column: Headline and CTAs -->
+                <div class="hero-content">
+                    <span class="badge">
+                        <span class="badge-dot"></span>
+                        Neural Ink Engine v1.0
+                    </span>
+                    <h1 class="hero-title">
+                        SATORI <span class="gradient-text">NEURAL INK</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        An immersive deep learning workspace demonstrating high-performance handwritten character recognition. Draw any digit (0-9) or uppercase letter (A-Z) to witness real-time neural classification.
+                    </p>
+                    
+                    <!-- Stats Display -->
+                    <div class="stats-block-row">
+                        <div class="stat-item">
+                            <span class="stat-val">36K+</span>
+                            <span class="stat-lbl">Trained Symbols</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-val">36</span>
+                            <span class="stat-lbl">Total Classes (0-9, A-Z)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-val">&lt; 4.8ms</span>
+                            <span class="stat-lbl">Inference Latency</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Horizontal CTA Block -->
+                    <div class="cta-block">
+                        <a href="#playground" class="btn-primary" id="scroll-to-canvas">
+                            Initialize Drawing
+                            <i class="fa-solid fa-arrow-right-long"></i>
+                        </a>
+                        <a href="#architecture" class="btn-secondary">
+                            View Model Specifications
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Right Column: 3D Neural Orbital Canvas -->
+                <div class="hero-showcase">
+                    <div class="orbital-container">
+                        <!-- Outer Orbital Ring (Counter-clockwise) -->
+                        <div class="orbital-ring ring-outer"></div>
+                        <!-- Inner Orbital Ring (Clockwise) -->
+                        <div class="orbital-ring ring-inner"></div>
+                        
+                        <!-- Floating Badges -->
+                        <div class="floating-badge badge-top-left">
+                            <span class="badge-val">98.4%</span>
+                            <span class="badge-lbl">Accuracy</span>
+                        </div>
+                        <div class="floating-badge badge-bottom-right">
+                            <span class="badge-val">CNN-ResNet</span>
+                            <span class="badge-lbl">Engine Active</span>
+                        </div>
+                        <div class="floating-badge badge-top-right">
+                            <span class="badge-val">Ink Velocity</span>
+                            <span class="badge-lbl">Optimized</span>
+                        </div>
+
+                        <!-- Central Canvas Circle -->
+                        <div class="canvas-wrapper">
+                            <canvas id="paint-canvas" width="450" height="450"></canvas>
+                            <div class="canvas-hint">Draw Here</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Canvas Control Panel -->
+                    <div class="canvas-controls">
+                        <button id="btn-draw" class="control-btn active" title="Draw Mode">
+                            <i class="fa-solid fa-pen-nib"></i> Draw
+                        </button>
+                        <button id="btn-erase" class="control-btn" title="Eraser Mode">
+                            <i class="fa-solid fa-eraser"></i> Erase
+                        </button>
+                        <button id="btn-undo" class="control-btn" title="Undo Last Stroke">
+                            <i class="fa-solid fa-rotate-left"></i> Undo
+                        </button>
+                        <button id="btn-clear" class="control-btn" title="Clear Canvas">
+                            <i class="fa-solid fa-trash-can"></i> Clear
+                        </button>
+                        <button id="btn-predict" class="btn-predict" title="Analyze Input">
+                            Analyze Ink <i class="fa-solid fa-network-wired"></i>
+                        </button>
+                    </div>
+
+                    <!-- Predictions Panel (Floating Glassmorphism) -->
+                    <div class="predictions-panel" id="predictions-box">
+                        <div class="pred-header">
+                            <h3>Classification Results</h3>
+                            <span class="model-status">Real-Time</span>
+                        </div>
+                        <div class="pred-content">
+                            <div class="main-prediction">
+                                <div class="prediction-char" id="pred-main">-</div>
+                                <div class="prediction-meta">
+                                    <span class="meta-label">Predicted Symbol</span>
+                                    <span class="meta-conf" id="pred-conf">0% Confidence</span>
+                                </div>
+                            </div>
+                            <div class="sub-predictions" id="pred-top5">
+                                <!-- Top 5 items dynamically generated -->
+                                <div class="sub-pred-placeholder">Draw a symbol and tap 'Analyze Ink' to classify.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Signature Features Grid (Tilt Cards) -->
+        <section id="architecture" class="features-section">
+            <div class="section-header-container">
+                <div class="section-title-wrap">
+                    <span class="section-tagline">Architectural Foundation</span>
+                    <h2 class="section-title">ENGINE SPECIFICATIONS</h2>
+                </div>
+                <div class="carousel-nav">
+                    <button class="nav-btn prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="nav-btn next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <!-- Card 1: CNN Model -->
+                <div class="tilt-card-wrapper">
+                    <div class="tilt-card">
+                        <div class="card-img-container">
+                            <div class="card-glow-overlay"></div>
+                            <div class="neural-visual-block model-viz">
+                                <div class="neural-node node-1"></div>
+                                <div class="neural-node node-2"></div>
+                                <div class="neural-node node-3"></div>
+                                <svg class="neural-connections">
+                                    <line x1="20%" y1="50%" x2="50%" y2="25%"></line>
+                                    <line x1="20%" y1="50%" x2="50%" y2="75%"></line>
+                                    <line x1="50%" y1="25%" x2="80%" y2="50%"></line>
+                                    <line x1="50%" y1="75%" x2="80%" y2="50%"></line>
+                                </svg>
+                            </div>
+                            <div class="card-img-mask"></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <h3>Convolutional Neural Net</h3>
+                                <span class="card-stat">v1.0.4</span>
+                            </div>
+                            <p class="card-desc">Custom PyTorch architecture composed of convolutional layers, batch normalization, max-pooling, and dropout modules to prevent overfitting during MNIST classification.</p>
+                            <div class="card-footer">
+                                <span class="price-text">1.6M Params</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: MNIST Dataset -->
+                <div class="tilt-card-wrapper">
+                    <div class="tilt-card">
+                        <div class="card-img-container">
+                            <div class="card-glow-overlay"></div>
+                            <div class="neural-visual-block dataset-viz">
+                                <div class="dataset-sample font-cabinet">0</div>
+                                <div class="dataset-sample font-cabinet">A</div>
+                                <div class="dataset-sample font-cabinet">3</div>
+                                <div class="dataset-sample font-cabinet">Z</div>
+                            </div>
+                            <div class="card-img-mask"></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <h3>Satori Character Set</h3>
+                                <span class="card-stat">36 Classes</span>
+                            </div>
+                            <p class="card-desc">Trained on 36,000 synthetic character samples (digits 0-9 and uppercase letters A-Z) generated dynamically from multiple system fonts with random rotations and distortions.</p>
+                            <div class="card-footer">
+                                <span class="price-text">36K Samples</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: ONNX Engine -->
+                <div class="tilt-card-wrapper">
+                    <div class="tilt-card">
+                        <div class="card-img-container">
+                            <div class="card-glow-overlay"></div>
+                            <div class="neural-visual-block engine-viz">
+                                <div class="spinning-core"></div>
+                                <i class="fa-solid fa-bolt-lightning core-icon"></i>
+                            </div>
+                            <div class="card-img-mask"></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <h3>ONNX Runtime Engine</h3>
+                                <span class="card-stat">Inference</span>
+                            </div>
+                            <p class="card-desc">The model is exported to Open Neural Network Exchange (ONNX) format, optimized for sub-millisecond CPU execution directly on the backend server for instant responses.</p>
+                            <div class="card-footer">
+                                <span class="price-text">&lt; 4.8ms Speed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Storytelling Section -->
+        <section id="dataset" class="story-section">
+            <div class="story-grid">
+                
+                <!-- Left Column: Overlapping Neural Layout Images -->
+                <div class="story-image-cluster">
+                    <div class="image-bg-glow"></div>
+                    <div class="story-img-container img-back">
+                        <div class="simulated-activation-map map-1"></div>
+                    </div>
+                    <div class="story-img-container img-front">
+                        <div class="simulated-activation-map map-2"></div>
+                    </div>
+                    
+                    <!-- Floating Quote Box -->
+                    <div class="quote-box">
+                        <i class="fa-solid fa-quote-left quote-icon"></i>
+                        <p class="quote-text">The convolutional filters isolate edge orientations, loop intersections, and stroke endpoints with absolute precision.</p>
+                        <span class="quote-author">Dr. Satori Research Team</span>
+                    </div>
+                </div>
+
+                <!-- Right Column: Story Text and Stats -->
+                <div class="story-content">
+                    <span class="story-tag">Deep Learning Insights</span>
+                    <h2 class="story-title">How Satori Deciphers Handwritings</h2>
+                    <p class="story-text-p">
+                        Traditional OCR models struggle with variable line weights, handwriting tilts, and character scale. Our CNN employs localized kernel convolutions that scan spatial sections of the canvas. 
+                    </p>
+                    <p class="story-text-p">
+                        By normalizing user ink via centripetal center-of-mass alignment, Satori aligns the drawing center to training benchmarks, maximizing character similarity and prediction reliability.
+                    </p>
+                    
+                    <!-- Large Numbers Stats Grid -->
+                    <div class="story-stats-grid">
+                        <div class="story-stat-box">
+                            <div class="stat-number">3<span class="stat-suffix">Conv</span></div>
+                            <span class="stat-caption">Kernel Filters</span>
+                        </div>
+                        <div class="story-stat-box">
+                            <div class="stat-number">98.4<span class="stat-suffix">%</span></div>
+                            <span class="stat-caption">Test Set Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reservation Section / Feedback Form -->
+        <section id="feedback" class="reservation-section">
+            <div class="reservation-card">
+                <div class="reservation-card-glow"></div>
+                <div class="reservation-header">
+                    <h2 class="reservation-title">Ink Correction Portal</h2>
+                    <p class="reservation-subtitle">Help train the Satori Neural Network. If the model misclassifies a character, submit it along with your intended character to flag it for the next training cycle.</p>
+                </div>
+                
+                <form id="feedback-form" class="reservation-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="user-name">Your Profile / Name</label>
+                            <input type="text" id="user-name" placeholder="Anonymous Researcher" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="drawn-char">What did you draw?</label>
+                            <select id="drawn-char" required>
+                                <option value="" disabled selected>Select character</option>
+                                <optgroup label="Digits">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                </optgroup>
+                                <optgroup label="Letters">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                    <option value="F">F</option>
+                                    <option value="G">G</option>
+                                    <option value="H">H</option>
+                                    <option value="I">I</option>
+                                    <option value="J">J</option>
+                                    <option value="K">K</option>
+                                    <option value="L">L</option>
+                                    <option value="M">M</option>
+                                    <option value="N">N</option>
+                                    <option value="O">O</option>
+                                    <option value="P">P</option>
+                                    <option value="Q">Q</option>
+                                    <option value="R">R</option>
+                                    <option value="S">S</option>
+                                    <option value="T">T</option>
+                                    <option value="U">U</option>
+                                    <option value="V">V</option>
+                                    <option value="W">W</option>
+                                    <option value="X">X</option>
+                                    <option value="Y">Y</option>
+                                    <option value="Z">Z</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-submit-container">
+                        <button type="submit" class="btn-submit">
+                            Submit Calibration Data
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+                <div id="form-success-msg" class="form-success-msg hidden">
+                    <i class="fa-solid fa-circle-check"></i> Calibration ink successfully cataloged. Thank you for contributing to the MNIST database!
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col col-brand">
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-fire-flame-curved class-flame"></i>
+                    <span>Satori AI</span>
+                </a>
+                <p class="brand-text">Pioneering interactive deep learning and neural visualizations in real-time desktop systems.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Workspace Navigation</h4>
+                <ul>
+                    <li><a href="#playground">Neural Playground</a></li>
+                    <li><a href="#architecture">Architecture Specs</a></li>
+                    <li><a href="#dataset">Dataset Insights</a></li>
+                    <li><a href="#feedback">Calibration Portal</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>System Architecture</h4>
+                <ul>
+                    <li><a href="#">FastAPI Server</a></li>
+                    <li><a href="#">PyTorch Training</a></li>
+                    <li><a href="#">ONNX Runtime CPU</a></li>
+                    <li><a href="#">OpenCV Processing</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col col-newsletter">
+                <h4>Neural Newsletter</h4>
+                <p>Stay up to date with new neural weights releases and MNIST model checkpoint updates.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to Satori weights feed!');">
+                    <input type="email" placeholder="Weights developer email..." required>
+                    <button type="submit"><i class="fa-solid fa-chevron-right"></i></button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 SATORI NEURAL SYSTEMS INC. ALL RIGHTS RESERVED.</p>
+            <div class="bottom-links">
+                <a href="#">TERMS OF SERVICE</a>
+                <a href="#">PRIVACY STATEMENT</a>
+                <a href="#">MODEL LICENSE</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
