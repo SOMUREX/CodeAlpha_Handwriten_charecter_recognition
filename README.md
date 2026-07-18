@@ -5,7 +5,7 @@ An immersive deep learning workspace demonstrating high-performance handwritten 
 ---
 
 ## ⚡ Live Web App
-Access the live deployment here: **[Live Demo URL](https://github.com/SOMUREX/CodeAlpha_Handwriten_charecter_recognition)** *(Or add your deployed hosting link here)*
+Access the live deployment here: **[⚡ Live Web App Demo](https://somurex.github.io/CodeAlpha_Handwriten_charecter_recognition/)**
 
 ---
 
