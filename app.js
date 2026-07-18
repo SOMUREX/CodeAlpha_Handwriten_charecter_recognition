@@ -3,7 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let ortSession = null;
     async function loadModel() {
         try {
-            ortSession = await ort.InferenceSession.create('./model.onnx');
+            console.log("Loading ONNX model and weights dynamically...");
+            const modelBuf = await fetch('./model.onnx').then(r => r.arrayBuffer());
+            const dataBuf = await fetch('./model.onnx.data').then(r => r.arrayBuffer());
+            ortSession = await ort.InferenceSession.create(new Uint8Array(modelBuf), {
+                externalData: [
+                    {
+                        data: new Uint8Array(dataBuf),
+                        path: 'model.onnx.data'
+                    }
+                ]
+            });
             console.log("ONNX Runtime Web loaded successfully. Client-side inference enabled.");
         } catch (e) {
             console.warn("ONNX Runtime Web failed to load model.onnx. Falling back to API server.", e);
