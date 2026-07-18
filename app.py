@@ -1,4 +1,5 @@
 import base64
+# pyrefly: ignore [missing-import]
 import numpy as np
 import cv2
 import onnxruntime as ort
@@ -10,8 +11,9 @@ import os
 
 app = FastAPI(title="Satori AI - Neural Ink Backend")
 
-# Model path
-MODEL_PATH = "model.onnx"
+# Model path and base directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "model.onnx")
 ort_session = None
 
 # Labels mapping (EMNIST 36 classes: 10 digits + 26 uppercase letters)
@@ -137,13 +139,26 @@ async def predict(req: PredictRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-# Serve HTML index
+# Serve static files from root directory
 @app.get("/")
 async def get_index():
-    if os.path.exists("static/index.html"):
-        return FileResponse("static/index.html")
+    path = os.path.join(BASE_DIR, "index.html")
+    if os.path.exists(path):
+        return FileResponse(path)
     return HTMLResponse("<h1>Satori AI Frontend is loading...</h1>")
 
-# Mount static directory
-os.makedirs("static", exist_ok=True)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+@app.get("/style.css")
+async def get_style():
+    return FileResponse(os.path.join(BASE_DIR, "style.css"))
+
+@app.get("/app.js")
+async def get_js():
+    return FileResponse(os.path.join(BASE_DIR, "app.js"))
+
+@app.get("/model.onnx")
+async def get_model():
+    return FileResponse(os.path.join(BASE_DIR, "model.onnx"))
+
+@app.get("/model.onnx.data")
+async def get_model_data():
+    return FileResponse(os.path.join(BASE_DIR, "model.onnx.data"))

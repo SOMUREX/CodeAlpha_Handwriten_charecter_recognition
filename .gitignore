@@ -3,7 +3,6 @@ __pycache__/
 *$py.class
 
 # Model files
-model.onnx.data
 
 # Virtual environment
 .venv/
